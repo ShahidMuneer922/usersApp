@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import db from '../firebase.js';
 import { Button, Spinner, Table } from 'react-bootstrap';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 const getUsers=async()=>{
   const querySnapshot = await getDocs(collection(db, 'users'));
   const userData = querySnapshot.docs.map((doc) => ({
@@ -13,6 +15,7 @@ const getUsers=async()=>{
 
 // Separate EmployeeRow component
 const EmployeeRow = ({ employee,fetchUsers }) => {
+  const navigate=useNavigate()
   const [isDeleting,setIsDeleteing]=useState()
   const handleDelete = async (employeeId) => {
     setIsDeleteing(true);
@@ -36,7 +39,7 @@ const EmployeeRow = ({ employee,fetchUsers }) => {
       <td>{employee.jobTitle}</td>
       <td>{employee.hireDate}</td>
       <td>
-        <Button variant='primary' href={`add-employee?employeeId=${employee.id}`} >
+        <Button variant='primary' onClick={()=>navigate(`/add-employee?employeeId=${employee.id}`)} >
           Edit
         </Button>{' '}
         <Button
@@ -59,6 +62,7 @@ const EmployeeRow = ({ employee,fetchUsers }) => {
 const Employees = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate=useNavigate()
 
 
   const handleEdit = (employeeId) => {
@@ -85,7 +89,7 @@ console.log({data})
     <div className='vh-100 p-4 '>
       <div className='d-flex justify-content-between mb-4'>
         <h3>Employees</h3>
-      <Button href='/add-employee'>Add New Employee</Button>
+      <Button onClick={()=>navigate('/add-employee')}>Add New Employee</Button>
       </div>
       <div>
         {loading ? (
