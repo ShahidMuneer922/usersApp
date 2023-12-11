@@ -36,17 +36,7 @@ const EmployeeRow = ({ employee, fetchUsers }) => {
       setIsDeleting(false);
     }
   };
-  const handleLogout = async () => {
-    const auth = getAuth();
 
-    try {
-      await signOut(auth);
-      // Redirect to the login page after successful logout
-      navigate("/login");
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  };
 
   return (
     <tr>
