@@ -6,6 +6,7 @@ import db from "../firebase.js";
 import { Button, Spinner, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { convertTimestampToDate, formatDate } from "../utils/date.js";
+import { getAuth, signOut } from "firebase/auth";
 
 // Function to fetch users from Firestore
 const getUsers = async () => {
@@ -33,6 +34,17 @@ const EmployeeRow = ({ employee, fetchUsers }) => {
       console.error("Error deleting user:", error);
     } finally {
       setIsDeleting(false);
+    }
+  };
+  const handleLogout = async () => {
+    const auth = getAuth();
+
+    try {
+      await signOut(auth);
+      // Redirect to the login page after successful logout
+      navigate("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
     }
   };
 
@@ -109,6 +121,18 @@ const Employees = () => {
     fetchUsers();
   }, []);
 
+  const handleLogout = async () => {
+    const auth = getAuth();
+
+    try {
+      await signOut(auth);
+      // Redirect to the login page after successful logout
+      navigate("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
   return (
     <div className="vh-100 p-4 ">
       <div className="d-flex justify-content-between mb-4">
@@ -116,6 +140,10 @@ const Employees = () => {
         {/* Button to navigate to Add New Employee page */}
         <Button onClick={() => navigate("/add-employee")}>
           Add New Employee
+        </Button>
+        {/* Logout Button */}
+        <Button variant="danger" onClick={handleLogout}>
+          Logout
         </Button>
       </div>
       <div>
