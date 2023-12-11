@@ -39,9 +39,10 @@ const schema = z.object({
 const Employee = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { control, handleSubmit, setValue, formState } = useForm({
-    resolver: zodResolver(schema),
-  });
+  const { control, handleSubmit, setValue, register, formState, setError } =
+    useForm({
+      resolver: zodResolver(schema),
+    });
   const { errors } = formState;
   const { isSubmitting } = formState;
   useEffect(() => {
