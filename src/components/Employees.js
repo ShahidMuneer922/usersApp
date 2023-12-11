@@ -138,13 +138,18 @@ const Employees = () => {
       <div className="d-flex justify-content-between mb-4">
         <h3>Employees</h3>
         {/* Button to navigate to Add New Employee page */}
-        <Button onClick={() => navigate("/add-employee")}>
-          Add New Employee
-        </Button>
-        {/* Logout Button */}
-        <Button variant="danger" onClick={handleLogout}>
-          Logout
-        </Button>
+        <div
+          className="d-flex justify-content-between"
+          style={{ width: "17rem" }}
+        >
+          <Button onClick={() => navigate("/add-employee")}>
+            Add New Employee
+          </Button>
+          {/* Logout Button */}
+          <Button variant="danger" onClick={handleLogout}>
+            Logout
+          </Button>
+        </div>
       </div>
       <div>
         {loading ? (
