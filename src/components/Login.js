@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Card, Form, Button, Alert, Spinner, } from 'react-bootstrap';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const auth = getAuth();
@@ -29,14 +29,13 @@ const Login = () => {
       }
     } catch (err) {
       setError(err.message);
-      console.log(err.message);
       setIsLoading(false);
     }
   };
 
   return (
     <>
-      <Card.Body>
+      <Card.Body style={{maxWidth:"400px"}}>
         <h2 className='text-center mb-4'>LOGIN</h2>
 
         <Form onSubmit={handleSubmit} className='d-flex flex-column gap-3'>
@@ -61,7 +60,7 @@ const Login = () => {
             {isLoading ? <Spinner animation='border' size='sm' /> : 'Login'}
           </Button>
           <div className='w-100 text-center mt-2'>
-            Don't Have An Account? <a href='/'>Sign Up</a>
+            Don't Have An Account? <NavLink to={'/signup'}>Sign Up</NavLink>
           </div>
         {error && <Alert variant='danger'>{error}</Alert>}
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { NavLink } from 'react-router-dom'
 
 const Signup = () => {
   const auth = getAuth();
@@ -29,7 +30,6 @@ const Signup = () => {
         email,
         password
       );
-      console.log(userCredential);
       setSuccess('User added successfully');
     } catch (err) {
       setError(err.message);
@@ -41,7 +41,7 @@ const Signup = () => {
 
   return (
     <>
-      <Card.Body>
+      <Card.Body style={{maxWidth:'400px'}}>
         <h2 className='text-center mb-4'>SIGN UP</h2>
 
         <Form onSubmit={handleSubmit} className='d-flex flex-column gap-3'>
@@ -74,7 +74,7 @@ const Signup = () => {
             {isLoading ? <Spinner animation='border' size='sm' /> : 'Sign Up'}
           </Button>
           <div className='w-100 text-center mt-2'>
-            Already Have An Account? <a href='/login'>Log In</a>
+            Already Have An Account? <NavLink to='/login'>Log In</NavLink>
           </div>
           {error && <Alert variant='danger'>{error}</Alert>}
           {success && <Alert variant='success'>{success}</Alert>}

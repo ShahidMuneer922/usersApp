@@ -3,6 +3,7 @@ import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import db from '../firebase.js';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { convertTimestampToDate, formatDate } from '../utils/date.js'
 
 const getUsers=async()=>{
   const querySnapshot = await getDocs(collection(db, 'users'));
@@ -33,11 +34,11 @@ const EmployeeRow = ({ employee,fetchUsers }) => {
     <tr>
       <td>{employee.id}</td>
       <td>{`${employee.first} ${employee.last}`}</td>
-      <td>{employee.dateOfBirth}</td>
+      <td>{formatDate(convertTimestampToDate(employee.dateOfBirth),'MM-dd-yyyy')}</td>
       <td>{employee.email}</td>
-      <td>{employee.departmentId}</td>
+      <td>{employee.department}</td>
       <td>{employee.jobTitle}</td>
-      <td>{employee.hireDate}</td>
+      <td>{formatDate(convertTimestampToDate(employee.hireDate),'MM-dd-yyyy')}</td>
       <td>
         <Button variant='primary' onClick={()=>navigate(`/add-employee?employeeId=${employee.id}`)} >
           Edit
@@ -84,7 +85,6 @@ const Employees = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
-console.log({data})
   return (
     <div className='vh-100 p-4 '>
       <div className='d-flex justify-content-between mb-4'>
@@ -104,7 +104,7 @@ console.log({data})
                 <th>Name</th>
                 <th>Date of Birth</th>
                 <th>Email</th>
-                <th>Department ID</th>
+                <th>Department</th>
                 <th>Job Title</th>
                 <th>Hire Date</th>
                 <th>Actions</th>
