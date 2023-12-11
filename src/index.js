@@ -7,7 +7,10 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+// Create a root using ReactDOM.createRoot to enable concurrent rendering
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Render the App component within the React Strict Mode
 root.render(
   <React.StrictMode>
     <App />

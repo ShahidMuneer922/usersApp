@@ -1,58 +1,79 @@
-import React, { useEffect, useState } from 'react';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import db from '../firebase.js';
-import { Button, Spinner, Table } from 'react-bootstrap';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { convertTimestampToDate, formatDate } from '../utils/date.js'
+/** @format */
 
-const getUsers=async()=>{
-  const querySnapshot = await getDocs(collection(db, 'users'));
+import React, { useEffect, useState } from "react";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import db from "../firebase.js";
+import { Button, Spinner, Table } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { convertTimestampToDate, formatDate } from "../utils/date.js";
+
+// Function to fetch users from Firestore
+const getUsers = async () => {
+  const querySnapshot = await getDocs(collection(db, "users"));
   const userData = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   }));
-  return userData
-}
+  return userData;
+};
 
-// Separate EmployeeRow component
-const EmployeeRow = ({ employee,fetchUsers }) => {
-  const navigate=useNavigate()
-  const [isDeleting,setIsDeleteing]=useState()
+// Separate EmployeeRow component for each row in the table
+const EmployeeRow = ({ employee, fetchUsers }) => {
+  const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Handle the deletion of an employee
   const handleDelete = async (employeeId) => {
-    setIsDeleteing(true);
+    setIsDeleting(true);
     try {
-      await deleteDoc(doc(db, 'users', employeeId));
+      await deleteDoc(doc(db, "users", employeeId));
       // Refresh data after deletion
       fetchUsers();
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error("Error deleting user:", error);
     } finally {
-      setIsDeleteing(false);
+      setIsDeleting(false);
     }
   };
+
   return (
     <tr>
       <td>{employee.id}</td>
       <td>{`${employee.first} ${employee.last}`}</td>
-      <td>{formatDate(convertTimestampToDate(employee.dateOfBirth),'MM-dd-yyyy')}</td>
+      <td>
+        {formatDate(convertTimestampToDate(employee.dateOfBirth), "MM-dd-yyyy")}
+      </td>
       <td>{employee.email}</td>
       <td>{employee.department}</td>
       <td>{employee.jobTitle}</td>
-      <td>{formatDate(convertTimestampToDate(employee.hireDate),'MM-dd-yyyy')}</td>
       <td>
-        <Button variant='primary' onClick={()=>navigate(`/add-employee?employeeId=${employee.id}`)} >
-          Edit
-        </Button>{' '}
+        {formatDate(convertTimestampToDate(employee.hireDate), "MM-dd-yyyy")}
+      </td>
+      <td>
+        {/* Button to navigate to the Edit page */}
         <Button
-          variant='danger'
+          variant="primary"
+          onClick={() => navigate(`/add-employee?employeeId=${employee.id}`)}
+        >
+          Edit
+        </Button>{" "}
+        {/* Button to handle employee deletion */}
+        <Button
+          variant="danger"
           onClick={() => handleDelete(employee.id)}
           disabled={isDeleting}
-          style={{minWidth:"73px"}}
+          style={{ minWidth: "73px" }}
         >
           {isDeleting ? (
-            <Spinner as='span' animation='border' size='sm' role='status' aria-hidden='true' />
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
           ) : (
-            'Delete'
+            "Delete"
           )}
         </Button>
       </td>
@@ -60,43 +81,51 @@ const EmployeeRow = ({ employee,fetchUsers }) => {
   );
 };
 
+// Main Employees component
 const Employees = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
-
+  // Handle edit action (currently just logging to console)
   const handleEdit = (employeeId) => {
-    // Implement your edit logic here
     console.log(`Edit clicked for employee with ID: ${employeeId}`);
   };
 
+  // Function to fetch users and update state
   const fetchUsers = async () => {
     try {
-    const userData=await getUsers()
+      const userData = await getUsers();
       setData(userData);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  // Fetch users on component mount
   useEffect(() => {
     fetchUsers();
   }, []);
+
   return (
-    <div className='vh-100 p-4 '>
-      <div className='d-flex justify-content-between mb-4'>
+    <div className="vh-100 p-4 ">
+      <div className="d-flex justify-content-between mb-4">
         <h3>Employees</h3>
-      <Button onClick={()=>navigate('/add-employee')}>Add New Employee</Button>
+        {/* Button to navigate to Add New Employee page */}
+        <Button onClick={() => navigate("/add-employee")}>
+          Add New Employee
+        </Button>
       </div>
       <div>
         {loading ? (
-          <Spinner animation='border' role='status'>
-            <span className='visually-hidden'>Loading...</span>
+          // Display a loading spinner while data is being fetched
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
           </Spinner>
         ) : (
+          // Display the table once data is loaded
           <Table striped bordered>
             <thead>
               <tr>
@@ -111,6 +140,7 @@ const Employees = () => {
               </tr>
             </thead>
             <tbody>
+              {/* Render EmployeeRow for each employee in the data */}
               {data.map((employee) => (
                 <EmployeeRow
                   key={employee.id}

@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+// Initialize Firebase app with configuration from environment variables
 const app = initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -14,6 +15,11 @@ const app = initializeApp({
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 });
 
+// Get the authentication instance from the Firebase app
 export const auth = getAuth();
+
+// Get the Firestore instance from the Firebase app
 export default getFirestore(app);
+
+// Alternatively, you can export the entire app if needed:
 // export default app;
