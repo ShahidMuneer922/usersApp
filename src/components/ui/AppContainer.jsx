@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Container } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // AppContainer component defines the layout container for different routes
 const AppContainer = ({ children }) => {

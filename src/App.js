@@ -1,12 +1,10 @@
 /** @format */
 
 import React from "react";
-import { Container } from "react-bootstrap";
 import {
   Route,
   BrowserRouter as Router,
   Routes,
-  useNavigate,
   Navigate,
 } from "react-router-dom";
 import "./App.css";

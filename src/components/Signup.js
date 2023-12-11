@@ -39,6 +39,7 @@ const Signup = () => {
         email,
         password
       );
+      console.log(userCredential);
       setSuccess("User added successfully");
     } catch (err) {
       // Handle errors during user creation
